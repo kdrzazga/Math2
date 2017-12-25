@@ -1,10 +1,9 @@
-package org.kd;
+package org.kd.math2;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.kd.PolygonAG;
 
 public class PolygonAG implements Cloneable {
     //AG stands for Analytical Geometry

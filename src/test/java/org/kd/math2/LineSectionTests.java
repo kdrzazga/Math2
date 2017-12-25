@@ -1,10 +1,9 @@
-package org.kd;
+package org.kd.math2;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-import static org.kd.LineSection.computeLength;
 
 public class LineSectionTests {
 
@@ -103,7 +102,7 @@ public class LineSectionTests {
         float ls1Length;
 
         lineSection1 = new LineSection(new PointAG(20, 20), new PointAG(40, 40));
-        ls1Length = Numbers.roundToFloat(computeLength.apply(lineSection1));
+        ls1Length = Numbers.roundToFloat(LineSection.computeLength.apply(lineSection1));
         LineSection sameLineSection;
 
         sameLineSection = lineSection1.createParalelSection.apply(0f);

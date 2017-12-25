@@ -1,4 +1,4 @@
-package org.kd;
+package org.kd.math2;
 
 import java.awt.*;
 import java.util.function.Function;

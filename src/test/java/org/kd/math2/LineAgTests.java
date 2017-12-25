@@ -1,4 +1,4 @@
-package org.kd;
+package org.kd.math2;
 
 import org.junit.Test;
 

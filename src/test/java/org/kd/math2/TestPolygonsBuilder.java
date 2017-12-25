@@ -1,4 +1,4 @@
-package org.kd;
+package org.kd.math2;
 
 public class TestPolygonsBuilder {
 
