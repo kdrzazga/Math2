@@ -39,8 +39,6 @@ public class LineSection extends LineAG implements Cloneable{
         float centerY = (p1.y + p2.y) / 2;
         return new PointAG(centerX, centerY);
     }
-
-
         /* positive angles:
                 pi rad
                 |

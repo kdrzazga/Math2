@@ -60,10 +60,10 @@ public class LineSectionTests {
 
         assertEquals(intersection1_2.x, 5f, delta);
         assertEquals(intersection1_2.y, 5f, delta);
-        assertTrue(nullIntersection1_3 == null);//intersection at point (-14, -14)- outside both sections
+        assertNull(nullIntersection1_3);//intersection at point (-14, -14)- outside both sections
         assertEquals(intersection2_3.x, 6.266667f, delta);
         assertEquals(intersection2_3.y, 3.7333336f, delta);
-        assertTrue(nullIntersection1 == null);//parallel lines - no intersection
+        assertNull(nullIntersection1);//parallel lines - no intersection
     }
 
     private static LineSection verticalLineSection;
@@ -88,7 +88,8 @@ public class LineSectionTests {
         p2 = new PointAG(10.3f, 10.3f);
         p3 = new PointAG(-10.3f, 20.3f);
 
-        verticalLineSection = new LineSection(10.3f, 33.33f, 10.3f, Numbers.roundToFloat(Math.PI));
+        verticalLineSection = new LineSection(10.3f, 33.33f, 10.3f
+                , Numbers.roundToFloat(Math.PI));
 
         assertFalse(verticalLineSection.yBelongsToLineSection.apply(p1.y));
         assertTrue(verticalLineSection.yBelongsToLineSection.apply(p2.y));
@@ -106,15 +107,27 @@ public class LineSectionTests {
         LineSection sameLineSection;
 
         sameLineSection = lineSection1.createParalelSection.apply(0f);
-        LineSection lineSectionAbove = lineSection1.createParalelSection.apply(ls1Length + 30);
-        LineSection lineSectionBelow = lineSection1.createParalelSection.apply(-ls1Length - 1);
+        LineSection lineSectionAbove = lineSection1.createParalelSection.apply(-ls1Length / 4);
+        LineSection lineSectionBelow = lineSection1.createParalelSection.apply(ls1Length / 4);
 
         Assert.assertTrue(lineSection1.equals(sameLineSection));
 
-        for (float x = -0.6f; x < 19.1f; x += (float) (Math.random() * 5)) {
-            Assert.assertTrue(lineSectionAbove.computeY(x) > lineSection1.computeY(x));}
-        for (float x = 40.8f; x < 60.6f; x += (float) (Math.random() * 5)) {
-            Assert.assertTrue(lineSectionBelow.computeY(x) > lineSection1.computeY(x));
+        float minXlsAbove = Math.min(lineSectionAbove.p1.x, lineSectionAbove.p2.x);
+        float minXls1 = Math.min(lineSection1.p1.x, lineSection1.p2.x);
+        float minXlsBelow = Math.min(lineSectionBelow.p1.x, lineSectionBelow.p2.x);
+        float maxXlsAbove = Math.max(lineSectionAbove.p1.x, lineSectionAbove.p2.x);
+        float maxXls1 = Math.max(lineSection1.p1.x, lineSection1.p2.x);
+        float maxXlsBelow = Math.max(lineSectionBelow.p1.x, lineSectionBelow.p2.x);
+
+        float[] leftXs = new float[]{minXlsAbove, minXls1, minXlsBelow};
+        float[] rightXs = new float[]{maxXlsAbove, maxXls1, maxXlsBelow};
+
+        float minCommonX = Numbers.getMax(leftXs);
+        float maxCommonX = Numbers.getMin(rightXs);
+
+        for (float x = minCommonX; x < maxCommonX; x += Math.abs(maxCommonX - minCommonX) / 10) {
+            assertTrue(lineSectionAbove.computeY(x) < lineSection1.computeY(x));
+            assertTrue(lineSectionBelow.computeY(x) > lineSection1.computeY(x));
         }
     }
 }
