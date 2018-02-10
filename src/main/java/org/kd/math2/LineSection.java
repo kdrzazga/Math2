@@ -147,7 +147,7 @@ public class LineSection extends LineAG {
         else {
             List<PointAG> pointsOfDivision = new ArrayList<>(sectionsCount);
 
-            double dividedSectionLen = LineSection.computeLength.apply(this) / sectionsCount;
+            double dividedSectionLen = computeLength.apply(this) / sectionsCount;
             double inclination = this.computeInclinationAngle();
 
             for (int i = 0; i < sectionsCount; i++)
@@ -158,32 +158,18 @@ public class LineSection extends LineAG {
             }
 
             pointsOfDivision.add(this.p1);
-            return LineSection.createBrokenLine(pointsOfDivision);
+            return createBrokenLine(pointsOfDivision);
         }
     }
 
-    /*public final static ArrayList<PointAG> divideSectionSetToEvenSections(ArrayList<PointAG> inputPoints, int outputPointsCount){
-        if (outputPointsCount <= inputPoints.size())
-            return inputPoints;
-        else{
+    public final List<LineSection> divideToLineSections(double length){
 
-            List<LineSection> brokenLine = createBrokenLine(inputPoints);
-
-            double totalLength = 0f;
-
-            for(LineSection section : brokenLine)
-                totalLength += computeLength.apply(section);
-
-            for(LineSection section : brokenLine){
-                int sectionDivisionCount = (int) ( outputPointsCount * computeLength.apply(section) / totalLength);
-
-            }
-
-            ArrayList<LineSection> outputLine= new ArrayList<>(outputPointsCount);
-
-            return outputPoints;
-        }
-    }*/
+        int sectionsCount = (int) (length / computeLength.apply(this));
+        if (sectionsCount <= 1)
+            return Collections.singletonList(new LineSection(this));
+        else
+        return divideToLineSections(sectionsCount);
+    }
 
     public final static List<LineSection> createBrokenLine(List<PointAG> points){
         List<LineSection> brokenLine = new ArrayList<>(points.size() -1 );

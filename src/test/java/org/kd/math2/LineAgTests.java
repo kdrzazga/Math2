@@ -20,7 +20,7 @@ public class LineAgTests {
         final PointAG expectedIntersection;
         final float delta = 0.01f;
 
-        line = TestLinesLineSectionsBuilder.getDiagonalLine();
+        line = TestLinesLineSectionsFactory.createDiagonalLine();
         expectedIntersection = new PointAG(150f, 150f);
 
         perpLine = line.computePerpendicularLine(new PointAG(x, y));
@@ -38,7 +38,7 @@ public class LineAgTests {
         float x, y;
         final float delta = 0.00001f;
 
-        diagonalLine = TestLinesLineSectionsBuilder.getDiagonalLine();
+        diagonalLine = TestLinesLineSectionsFactory.createDiagonalLine();
         for (y = -150; y < 20 * Math.pow(10, 12); y += Math.pow(10, 7) * Math.random()) {
             x = diagonalLine.computeX(y);
             assertEquals(x, y, delta);

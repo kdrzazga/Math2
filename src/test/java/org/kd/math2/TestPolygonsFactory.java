@@ -1,6 +1,6 @@
 package org.kd.math2;
 
-public class TestPolygonsBuilder {
+public class TestPolygonsFactory {
 
     public enum PolygonType {
         TRIANGLE, SMALL_TRIANGLE_2, BIG_TRIANGLE, CONVEX_TETRAGON_BIG, CONVEX_TETRAGON_SMALL
