@@ -1,9 +1,12 @@
 package org.kd.math2;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Function;
 
-public class LineSection extends LineAG implements Cloneable{
+public class LineSection extends LineAG {
 
     public PointAG p1;
     public PointAG p2;
@@ -12,6 +15,12 @@ public class LineSection extends LineAG implements Cloneable{
         super(new PointAG(x1, y1), new PointAG(x2, y2));
         this.p1 = new PointAG(x1, y1);
         this.p2 = new PointAG(x2, y2);
+    }
+
+    public LineSection(LineSection ls){
+        super(ls.p1, ls.p2);
+        this.p1 = new PointAG(ls.p1);
+        this.p2 = new PointAG(ls.p2);
     }
 
     public LineSection(Point p1, Point p2) {
@@ -34,7 +43,7 @@ public class LineSection extends LineAG implements Cloneable{
         p2.moveByVector(length, angle);
     }
 
-    public PointAG computeCenter() {
+    public final PointAG computeCenter() {
         float centerX = (p1.x + p2.x) / 2;
         float centerY = (p1.y + p2.y) / 2;
         return new PointAG(centerX, centerY);
@@ -47,7 +56,7 @@ public class LineSection extends LineAG implements Cloneable{
                 2pi rad = 0 rad     
      */
     
-    public double computePositiveInclinationAngle()
+    public final double computePositiveInclinationAngle()
     {
         return computeInclinationAngle() +Math.PI;
     }
@@ -60,7 +69,7 @@ public class LineSection extends LineAG implements Cloneable{
                 180 deg       
      */
 
-    public double computeInclinationAngle() {
+    public final double computeInclinationAngle() {
         double ySpan = this.p1.y - this.p2.y;
         double xSpan = this.p1.x - this.p2.x;
         return Math.atan2(xSpan, ySpan);
@@ -73,7 +82,7 @@ public class LineSection extends LineAG implements Cloneable{
             -> (y >= Math.min(this.p1.y, this.p2.y) && (y <= Math.max(this.p1.y, this.p2.y)));
 
     @Override
-    public float computeY(float x) {
+    public final float computeY(float x) {
         if (xBelongsToLineSection.apply(x))
         {
             return super.computeY(x);
@@ -97,7 +106,7 @@ public class LineSection extends LineAG implements Cloneable{
             return null;
     }
     
-    public void moveP2MultiplyingBy(float scalar)
+    public final void moveP2MultiplyingBy(double scalar)
     {
         double length = computeLength.apply(this);
         double inclination = this.computeInclinationAngle() + Math.PI;
@@ -116,17 +125,77 @@ public class LineSection extends LineAG implements Cloneable{
         return new LineSection(parSectionP1, parSectionP2);
     };
 
-    public static final Function<LineSection, Double> computeLength = section
+    public final static Function<LineSection, Double> computeLength = section
             -> Math.sqrt(Math.pow((section.p1.y - section.p2.y), 2)
             + Math.pow((section.p1.x - section.p2.x), 2));
 
-    public boolean equals(LineSection lineSectionToCmp){
+    public final boolean equals(LineSection lineSectionToCmp){
         return (this.p1.equals(lineSectionToCmp.p1)
                 && (this.p2.equals(lineSectionToCmp.p2)));
     }
 
+    public final boolean equalsNoMatterPointOrder(LineSection lineSectionToCmp){
+        return
+                equals(lineSectionToCmp)
+                || ((this.p1.equals(lineSectionToCmp.p2)
+                && (this.p2.equals(lineSectionToCmp.p1))));
+    }
+
+    public final List<LineSection> divideToLineSections(int sectionsCount){
+        if (sectionsCount <= 1)
+            return Collections.singletonList(new LineSection(this));
+        else {
+            List<PointAG> pointsOfDivision = new ArrayList<>(sectionsCount);
+
+            double dividedSectionLen = LineSection.computeLength.apply(this) / sectionsCount;
+            double inclination = this.computeInclinationAngle();
+
+            for (int i = 0; i < sectionsCount; i++)
+            {
+                PointAG point = new PointAG(this.p2);
+                point.moveByVector(dividedSectionLen * i, inclination);
+                pointsOfDivision.add(point);
+            }
+
+            pointsOfDivision.add(this.p1);
+            return LineSection.createBrokenLine(pointsOfDivision);
+        }
+    }
+
+    /*public final static ArrayList<PointAG> divideSectionSetToEvenSections(ArrayList<PointAG> inputPoints, int outputPointsCount){
+        if (outputPointsCount <= inputPoints.size())
+            return inputPoints;
+        else{
+
+            List<LineSection> brokenLine = createBrokenLine(inputPoints);
+
+            double totalLength = 0f;
+
+            for(LineSection section : brokenLine)
+                totalLength += computeLength.apply(section);
+
+            for(LineSection section : brokenLine){
+                int sectionDivisionCount = (int) ( outputPointsCount * computeLength.apply(section) / totalLength);
+
+            }
+
+            ArrayList<LineSection> outputLine= new ArrayList<>(outputPointsCount);
+
+            return outputPoints;
+        }
+    }*/
+
+    public final static List<LineSection> createBrokenLine(List<PointAG> points){
+        List<LineSection> brokenLine = new ArrayList<>(points.size() -1 );
+        for (int i = 0; i < points.size() - 1; i++){
+            LineSection line = new LineSection(points.get(i), points.get(i + 1));
+            brokenLine.add(line);
+        }
+        return brokenLine;
+    }
+
     @Override
-    public String toString() {
+    public final String toString() {
         return "(" + this.p1.x + ", " + this.p1.y
                 + "), (" + this.p2.x + ", " + this.p2.y + ")";
     }

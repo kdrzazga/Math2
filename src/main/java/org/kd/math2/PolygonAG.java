@@ -142,10 +142,9 @@ public class PolygonAG implements Cloneable {
 
         List<PointAG> scaledPoints = new ArrayList<>(this.points.size());
 
-        this.points.stream().map(point -> new LineSection(center, point)).map(ray -> {
-            ray.moveP2MultiplyingBy(scaleFactor);
-            return ray;
-        }).forEachOrdered(ray -> scaledPoints.add(ray.p2));
+        this.points.stream().map(point -> new LineSection(center, point))
+                .peek(ray -> ray.moveP2MultiplyingBy(scaleFactor))
+                .forEachOrdered(ray -> scaledPoints.add(ray.p2));
 
         this.points = scaledPoints;
     }

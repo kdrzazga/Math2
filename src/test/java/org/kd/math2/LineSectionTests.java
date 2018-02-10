@@ -3,6 +3,9 @@ package org.kd.math2;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class LineSectionTests {
@@ -129,4 +132,79 @@ public class LineSectionTests {
             assertTrue(lineSectionBelow.computeY(x) > lineSection1.computeY(x));
         }
     }
+
+    @Test
+    public void testSectionDividing(){
+        List<LineSection> expectedLineSections0033 = Arrays.asList(
+                new LineSection(2,2, 3,3),
+                new LineSection(1,1, 2,2),
+                new LineSection(0,0, 1,1)
+        );
+
+        List<LineSection> expectedLineSections121212212 = Arrays.asList(
+                new LineSection(12,212, 12,211),
+                new LineSection(12,211, 12,210),
+                new LineSection(12,210, 12,209)
+        );
+
+        List<LineSection> expectedLineSections1154 = Arrays.asList(
+                new LineSection(5,4, 3,2.5f),
+                new LineSection(3,2.5f, 1,1)
+        );
+
+        List<LineSection> expectedLineSections5411 = Arrays.asList(
+                new LineSection(3,2.5f, 1,1),
+                new LineSection(5,4, 3,2.5f)
+        );
+
+        List<LineSection> expectedLineSections14301010 = Arrays.asList(
+                new LineSection(10,10, 11,15),
+                new LineSection(11,15, 12,20)
+        );
+
+        testSectionDividing(new LineSection(0,0, 3,3), expectedLineSections0033, 3);
+        testSectionDividing(new LineSection(12,12,12, 212), expectedLineSections121212212, 200);
+        testSectionDividing(new LineSection(1,1,5, 4), expectedLineSections1154, 2);
+        testSectionDividing(new LineSection(5,4,1, 1), expectedLineSections5411, 2);
+        testSectionDividing(new LineSection(14,30,10, 10), expectedLineSections14301010, 4);
+    }
+
+    private void testSectionDividing(LineSection ls, List<LineSection> expectedLineSections0033, int divisionCount) {
+        List<LineSection> dividedLineSections= ls.divideToLineSections(divisionCount);
+        assertEquals(divisionCount, dividedLineSections.size());
+        for (int i = 0; i < expectedLineSections0033.size(); i++)
+            assertTrue("act " + dividedLineSections.get(i) + " exp " + expectedLineSections0033.get(i)
+                    , dividedLineSections.get(i).equalsNoMatterPointOrder(expectedLineSections0033.get(i)));
+    }
+
+    @Test
+    public void testBrokenLineCreation(){
+        PointAG[] inputPoints = {
+                new PointAG(1, 1), new PointAG(2, 2),new PointAG(3, 1)
+        };
+
+        LineSection[] expectedSections = { new LineSection(1,1, 2, 2),
+                new LineSection(2,2, 3, 1)};
+
+        List<LineSection> brokenLine = LineSection.createBrokenLine(Arrays.asList(inputPoints));
+
+        int i = 0;
+        for (LineSection ls : brokenLine){
+            assertTrue(ls.equalsNoMatterPointOrder(expectedSections[i]));
+            i++;
+        }
+    }
+/*
+    @Test
+    public void testSectionDivision(){
+        PointAG[] pointsArray = {new PointAG(1f, 1f), new PointAG(2f, 2f), new PointAG(3f, 1f)
+                , new PointAG(4f, 2f), new PointAG(5f, 1f)};
+        ArrayList<PointAG> inputPoints = Arrays.asList(pointsArray);
+
+        List<PointAG> outputPoints1 = LineSection.divideSectionSetToEvenSections(inputPoints, 5);
+        List<PointAG> outputPoints2 = LineSection.divideSectionSetToEvenSections(inputPoints, 3);
+
+
+
+    }*/
 }
