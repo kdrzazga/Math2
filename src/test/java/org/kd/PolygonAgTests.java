@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 public class PolygonAgTests {
 
     @Test
-    public static void testGetLineSectionCrossedBy() {
+    public void testGetLineSectionCrossedBy() {
         PolygonAG triangle;
         LineSection crossingLineSection = new LineSection(1200, 1200, 1300, 1000);
         final PointAG[] TRIANGLE_PTS = {new PointAG(1100, 1100), new PointAG(2100, 1100), new PointAG(1100, 2100)};
@@ -23,7 +23,7 @@ public class PolygonAgTests {
 
 
     @Test
-    public static void testGetLineSectionCrossingVerticalSection() {
+    public void testGetLineSectionCrossingVerticalSection() {
         final PointAG[] RECTANGLE_VERTICES = {new PointAG(10, 10), new PointAG(500, 15), new PointAG(490, 900), new PointAG(10, 890)};
         LineSection verticalLineSection, crossingSection;
 
@@ -40,7 +40,7 @@ public class PolygonAgTests {
     }
 
     @Test
-    public static void testIsConvex() {
+    public void testIsConvex() {
         final PointAG[] CONCAVE_POLYGON1_VERTICES = {new PointAG(0, 900), new PointAG(123, 500), new PointAG(2500, 900),
                 new PointAG(124, 900), new PointAG(123, 899), new PointAG(122, 900)};
         final PointAG[] CONCAVE_POLYGON2_VERTICES = {new PointAG(10.53f, 10), new PointAG(12.33f, 30), new PointAG(10, 50),
