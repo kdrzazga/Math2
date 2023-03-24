@@ -5,12 +5,19 @@ pipeline {
         git 'Default'   
     }
     
+    triggers {
+        cron('15 0 * * *')   
+    }
+    
     stages {
         stage('checkout'){
             steps {
                 git 'http://github.com/kdrzazga/Math2'
             }
             post {
+                always {
+                    echo 'Checout finished.'
+                }
                 success {
                     echo "Project checked out from GH"
                 }
@@ -21,8 +28,8 @@ pipeline {
                 sh "mvn -Dmaven.test.failure.ignore=true clean build"
             }
             post {
-                success {
-                    echo "Project built"
+                failure {
+                    echo "Build failed"
                 }
             }            
         }
@@ -34,6 +41,14 @@ pipeline {
                 success {
                     echo "Tests passed"
                 }
+            }
+        }
+        stage('deploy'){
+            steps {
+                script {
+                    deploy
+                }
+                
             }
         }
     }
