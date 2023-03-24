@@ -1,26 +1,39 @@
 pipeline {
     agent any
-
+    
+    tools{
+        git 'Default'   
+    }
+    
     stages {
-        stage('Checkout') {
+        stage('checkout'){
             steps {
-                echo off
-                echo 'Stage: checkout'
-                if exist WA2 rmdir /q /s WA2
-                mkdir WA2
-                cd WA2
-                git clone https://github.com/kdrzazga/Math2.git
-                echo ---------------------------------
+                git 'http://github.com/kdrzazga/Math2'
+            }
+            post {
+                success {
+                    echo "Project checked out from GH"
+                }
             }
         }
-        stage('Build and Test') {
+        stage('build') {
             steps {
-                echo off
-                echo 'Stage: Build and Test'
-                cd WA2\Math2\
-                dir
-                c:\maven\bin\mvn clean test
-                echo ---------------------------------
+                sh "mvn -Dmaven.test.failure.ignore=true clean build"
+            }
+            post {
+                success {
+                    echo "Project built"
+                }
+            }            
+        }
+        stage('test'){
+            steps {
+                sh "mvn -Dmaven.test.failure.ignore=true test"
+            }
+            post {
+                success {
+                    echo "Tests passed"
+                }
             }
         }
     }
