@@ -16,7 +16,7 @@ pipeline {
             }
             post {
                 always {
-                    echo 'Checout finished.'
+                    echo 'Checkout finished.'
                 }
                 success {
                     echo "Project checked out from GH"
@@ -35,7 +35,7 @@ pipeline {
         }
         stage('test'){
             steps {
-                sh "mvn -Dmaven.test.failure.ignore=true test"
+                sh "mvn test"
             }
             post {
                 success {
@@ -43,12 +43,20 @@ pipeline {
                 }
             }
         }
-        stage('deploy'){
+        stage('build'){
             steps {
                 script {
-                    deploy
+                    sh "mvn package"
                 }
-                
+            }
+        }
+        stage('deploy') {
+            steps {
+                script {
+                    def image = docker.build("Math2:${env.BUILD_ID}", ".")
+                    image.push()
+                    sh "docker run -d -p 8080:8080 Math2:${env.BUILD_ID}"
+                }
             }
         }
     }
