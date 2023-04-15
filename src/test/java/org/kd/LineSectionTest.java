@@ -6,7 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.kd.LineSection.computeLength;
 
-public class LineSectionTests {
+public class LineSectionTest {
 
     private final static LineSection[] LINE_SECTION = new LineSection[4];
 

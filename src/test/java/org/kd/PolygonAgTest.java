@@ -2,10 +2,9 @@ package org.kd;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
-public class PolygonAgTests {
+public class PolygonAgTest {
 
     @Test
     public void testGetLineSectionCrossedBy() {
@@ -15,10 +14,10 @@ public class PolygonAgTests {
 
         triangle = new PolygonAG(TRIANGLE_PTS);
         crossingLineSection = triangle.getLineSectionCrossedBy(crossingLineSection);
-        assertTrue(crossingLineSection.p1.x == 1100.0);
-        assertTrue(crossingLineSection.p1.y == 1100.0);
-        assertTrue(crossingLineSection.p2.x == 2100);
-        assertTrue(crossingLineSection.p2.y == 1100);
+        assertEquals(crossingLineSection.p1.x, 1100.0, 0.1);
+        assertEquals(crossingLineSection.p1.y, 1100.0, 0.1);
+        assertEquals(crossingLineSection.p2.x, 2100, 0.1);
+        assertEquals(crossingLineSection.p2.y, 1100, 0.1);
     }
 
 
@@ -33,10 +32,10 @@ public class PolygonAgTests {
 
         crossingSection = rectangle.getLineSectionCrossingVerticalSection(verticalLineSection);
 
-        assertTrue(crossingSection.p2.x == 10);
-        assertTrue(crossingSection.p2.y == 890);
-        assertTrue(crossingSection.p1.x == 490);
-        assertTrue(crossingSection.p1.y == 900);
+        assertEquals(10, crossingSection.p2.x, 0.0);
+        assertEquals(890, crossingSection.p2.y, 0.0);
+        assertEquals(490, crossingSection.p1.x, 0.0);
+        assertEquals(900, crossingSection.p1.y, 0.0);
     }
 
     @Test

@@ -14,7 +14,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <start-class>org.kd.main.App</start-class>
         <maven.version>3.11.0</maven.version>
-        <docker.image.prefix>my-registry.com/my-username</docker.image.prefix>
+        <docker.image.prefix>math2</docker.image.prefix>
     </properties>
 
     <repositories>
@@ -33,7 +33,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>4.13.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -67,17 +67,18 @@
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>dockerfile-maven-plugin</artifactId>
-                <version>1.4.9</version>
+                <version>1.4.13</version>
                 <executions>
                     <execution>
-                        <id>default</id>
+                        <id>build-image</id>
                         <goals>
                             <goal>build</goal>
-                            <goal>push</goal>
+                            <!--<goal>push</goal>-->
                         </goals>
                     </execution>
                 </executions>
                 <configuration>
+                    <dockerfile>Dockerfile</dockerfile>
                     <repository>${docker.image.prefix}/${project.artifactId}</repository>
                     <tag>${project.version}</tag>
                     <buildArgs>
